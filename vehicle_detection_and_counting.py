@@ -42,3 +42,25 @@ for (x,y,w,h) in cars:
 print(cnt, " cars found")
 Image.fromarray(image_arr)
 
+cascade_src = 'cars.xml'
+video_src = 'Cars.mp4'
+
+cap = cv2.VideoCapture(video_src)
+car_cascade = cv2.CascadeClassifier(cascade_src)
+video = cv2.VideoWriter('result.avi',cv2.VideoWriter_fourcc(*'DIVX'), 15, (450,250))
+
+while True:
+    ret, img = cap.read()
+   
+    if (type(img) == type(None)):
+        break
+        
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    cars = car_cascade.detectMultiScale(gray, 1.1, 2)
+
+    for (x,y,w,h) in cars:
+        cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,255),2)
+
+video.write(img) 
+video.release()
+
